@@ -58,13 +58,58 @@
 #   optional string err_detail = 101;
 # }
 
-['message', 'enum', 'service', 'extend'].each{ |file| require "protobug/message/#{file}" }
+['message', 'enum', 'service', 'extend'].each{ |file| require "protobuf/message/#{file}" }
 
 module Cyberdyne
   module Doozer
     class Request < ::Protobuf::Message
+      defined_in __FILE__
+      optional :int32, :tag, 1
       class Verb < ::Protobuf::Enum
+        defined_in __FILE__
+        GET     = value(:GET,     1)
+        SET     = value(:SET,     2)
+        DEL     = value(:DEL,     3)
+        REV     = value(:REV,     5)
+        WAIT    = value(:WAIT,    6)
+        NOP     = value(:NOP,     7)
+        WALK    = value(:WALK,    9)
+        GETDIR  = value(:GETDIR, 14)
+        STAT    = value(:STAT,   16)
+        ACCESS  = value(:ACCESS, 99)
       end
+      optional :Verb,   :verb,      2
+      optional :string, :path,      4
+      optional :bytes,  :value,     5
+      optional :int32,  :other_tag, 6
+      optional :int32,  :offset,    7
+      optional :int64,  :rev,       9
+    end
+
+    class Response < ::Protobuf::Message
+      optional :int32,  :tag,       1
+      optional :int32,  :flags,     2
+      optional :int64,  :rev,       3
+      optional :string, :path,      5
+      optional :bytes,  :value,     6
+      optional :int32,  :len,       8
+      class Err < ::Protobuf::Enum
+        defined_in __FILE__
+        OTHER         = value(:OTHER,       127)
+        TAG_IN_USE    = value(:TAG_IN_USE,    1)
+        UNKNOWN_VERB  = value(:UNKNOWN_VERB,  2)
+        READONLY      = value(:READONLY,      3)
+        TOO_LATE      = value(:TOO_LATE,      4)
+        REV_MISMATCH  = value(:REV_MISMATCH,  5)
+        BAD_PATH      = value(:BAD_PATH,      6)
+        MISSING_ARG   = value(:MISSING_ARG,   7)
+        RANGE         = value(:RANGE,         8)
+        NOTDIR        = value(:NOTDIR,       20)
+        ISDIR         = value(:ISDIR,        21)
+        NOENT         = value(:NOENT,        22)
+      end
+      optional :Err,    :err_code,    100
+      optional :string, :err_detail,  101
     end
   end
 end

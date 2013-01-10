@@ -25,7 +25,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency "gene_pool"
   gem.add_dependency "multi_json"
   gem.add_dependency "ruby_protobuf"
-  gem.add_dependency "bson"
-  gem.add_dependency "bson_ext"
+  gem.add_dependency "moped"
   gem.add_dependency "celluloid-io"
 end
